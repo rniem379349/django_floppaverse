@@ -1,0 +1,62 @@
+{% extends 'shared/base.html' %}
+
+{% load static %}
+{% load shared %}
+
+{% block head_load %}
+<link rel="stylesheet" type="text/css" href="{% static 'chat/css/chat.css' %}">
+{% endblock head_load %}
+
+{% block title_nav_tools %}
+<a href="{% url 'users:user_list' %}" class="btn btn-sm btn-success d-flex align-items-center justify-content-around">
+    <i class="bi-plus-circle-fill me-1" style="font-size: 1rem;"></i>
+    <small class="text-center">New Chat</small>
+</a>
+{% endblock title_nav_tools %}
+
+{% block content %}
+<div class="row rounded bg-light me-0">
+    <ul class="list-group px-1 my-1">
+        {% for room in user_rooms %}
+        <a class="text-decoration-none" href="{% url 'chat:room' room.pk %}">
+            <li class="list-group-item d-flex justify-content-between">
+                <div class="d-flex">
+                    <div class="d-flex chat-member-pics-container">
+                        {% for part in room.other_participants %}
+                            <img src="{{ part.profile.profile_pic.url }}" alt="*" class="rounded-circle me-2" style="max-height: 3rem;">
+                        {% endfor %}
+                    </div>
+                    <div class="d-flex text-start flex-column align-items-start">
+                        <span>
+                            <b>{{ room.other_participants_str }}</b>
+                        </span>
+                        <span>
+                            {% if room.latest_message.sender == request.user %}
+                                You:
+                            {% endif %}
+                            {{ room.latest_message.content }}
+                        </span>
+                    </div>
+                </div>
+                <small>
+                    {{ room.latest_message.sent|get_time_elapsed_human }} ago
+                </small>
+                </li>
+        </a>
+        {% endfor %}
+    </ul>
+</div>
+    {% comment %} <script>
+        document.querySelector('#room-name-input').focus();
+        document.querySelector('#room-name-input').onkeyup = function(e) {
+            if (e.keyCode === 13) {  // enter, return
+                document.querySelector('#room-name-submit').click();
+            }
+        };
+
+        document.querySelector('#room-name-submit').onclick = function(e) {
+            var roomName = document.querySelector('#room-name-input').value;
+            window.location.pathname = '/chat/' + roomName + '/';
+        };
+    </script> {% endcomment %}
+{% endblock content %}

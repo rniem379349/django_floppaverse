@@ -1,0 +1,22 @@
+<button id="chat-notification-button" class="btn btn-primary me-2 d-flex align-items-center dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <span id="chat-notification-num-badge" class="badge bg-danger position-static"></span>
+    <i class="ms-1 bi bi-chat"></i>
+</button>
+<ul id="chat-notifications-container" class="dropdown-menu">
+    <a class="dropdown-item text-center link-primary text-decoration-none" href="{% url 'chat:index' %}">
+        Your chats
+    </a>
+    {% comment %} {% for notification in latest_notifications %}
+        <li>
+            <div class="dropdown-item">
+                {{ notification.content }}
+            </div>
+        </li>
+    {% empty %}
+        <li>
+            <div class="dropdown-item chat-notifications-nothing-new">
+                Nothing new yet.
+            </div>
+        </li>
+    {% endfor %} {% endcomment %}
+</ul>

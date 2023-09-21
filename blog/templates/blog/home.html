@@ -1,0 +1,99 @@
+{% extends 'shared/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load blog_tags %}
+
+{% block head_load %}
+<link rel="stylesheet" href="{% static 'blog/css/blog_post.css' %}">
+{% endblock head_load %}
+
+{% block title_nav_tools %}
+<a href="{% url 'blog:blog_post_create' %}" class="btn btn-sm btn-success d-flex align-items-center justify-content-around">
+    <i class="bi-plus-circle-fill me-1" style="font-size: 1rem;"></i>
+    <small class="text-center">New Post</small>
+</a>
+{% endblock title_nav_tools %}
+
+{% block content %}
+<div class="row gx-5 me-0" style="margin-top: -0.5rem;">
+    <div class="col-md-9">
+        {% for post in page_obj %}
+            <div class="row">
+                <div class="card mt-2 px-0">
+                    <a href="{% url 'blog:blog_post_detail' post.pk %}" class="text-dark text-decoration-none">
+                        <img src="{{ post.get_thumbnail }}" class="card-img-top img-fluid" alt="">
+                        <div class="card-body">
+                            <div class="title-div d-flex align-items-center justify-content-between">
+                                <h5 class="card-title">{{ post.title }} {% if post.is_recent %}<span class="badge bg-primary">New</span>{% endif %}</h5>
+                                <div class="btn-group btn-group-sm" role="group" aria-label="...">
+                                    <a tabindex="0" role="button" class="btn btn-sm btn-link" data-bs-toggle="popover" data-bs-placement="top" data-post-pk="{{ post.pk }}" title="Share this post">
+                                        <i class="bi bi-share" style="font-size: 1rem;"></i>
+                                    </a>
+                                    {% if user == post.author %}
+                                        {# Edit post #}
+                                        <a href="{% url 'blog:blog_post_update' post.pk %}" class="btn btn-sm btn-link">
+                                            <i class="bi bi-pencil" style="font-size: 1rem;"></i>
+                                        </a>
+                                        {# Delete post #}
+                                        <a href="{% url 'blog:blog_post_delete' post.pk %}" class="btn btn-sm btn-link">
+                                            <i class="bi bi-x-circle" style="font-size: 1rem;"></i>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <a href="{% url 'users:profile' post.author.pk %}" class="text-dark text-decoration-none">
+                                <div class="d-flex">
+                                    <img src="{{ post.author.profile.profile_pic.url }}" alt="" class="rounded-circle me-2" style="max-height: 1.5rem;">
+                                    <h6>{{ post.author }} <small class="text-muted"> Last updated {{ post.updated_timestamp|date:"D d M Y" }}</small></h6>
+                                </div>
+                            </a>
+                            <p class="card-text">{{ post.content|striptags|safe|truncatewords_html:20 }}</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            {# Popover for post share button #}
+            <div id="post-{{ post.pk }}-popover" class="d-none">
+                <div class="popover-content input-group mb-3">
+                    {% with post.get_absolute_url as post_url %}
+                        <input type="text" class="form-control copy-to-clipboard-field" placeholder="{% get_shareable_link post_url %}" aria-label="{% get_shareable_link post_url %}" value="{% get_shareable_link post_url %}" aria-describedby="button-addon2" readonly>
+                    {% endwith %}
+                    <a class="btn btn-outline-primary btn-copy-to-clipboard" type="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">Copy</a>
+                </div>
+            </div>
+        {% endfor %}
+
+        {# Pagination #}
+        <div class="row">
+            {% include "shared/paginator.html" %}
+        </div>
+    </div>
+
+    <div class="col-md-3 bg-light my-2 rounded">
+        {# 'About Me' section #}
+        <div class="card about-author bg-light py-5 border-0">
+            <img src="{% static 'shared/img/floppa.jpeg' %}" class="card-img-top rounded-circle mx-auto w-50" alt="Author">
+            <div class="card-body text-center">
+                <h5 class="card-title">About the author</h5>
+                <small class="card-text">
+                    Floppa is a software developer from South Hogwarts Institute of Technology. He specialises in Python and web development using Django.
+                    In his free time he likes to listen to music, pop balloons and go hunting.
+                </small>
+            </div>
+        </div>
+        {# Newsletter section #}
+        <div class="card newsletter-form bg-light py-5 border-0 border-top">
+            <img src="{% static 'bootstrap-icons-1.7.2/pencil-square.svg' %}" class="card-img-top mx-auto w-25" alt="Author">
+            <div class="card-body text-center">
+                <h5 class="card-title">Sing up for the newsletter!</h5>
+                <small class="card-text">You will get periodical updates (~1 per week), as well as recommendations and tips about web development. It's completely free, and you can cancel anytime.</small>
+                <form class="mt-2" method="post" action="{% url 'blog:newsletter_subscribe' %}">
+                    {% csrf_token %}
+                    {{ newsletter_form|crispy }}
+                    <input class="btn btn-sm btn-primary mt-1" type="submit" value="Sign up"/>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

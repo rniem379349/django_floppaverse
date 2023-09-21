@@ -1,0 +1,20 @@
+{% extends 'shared/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block head_load %}
+<link rel="stylesheet" href="{% static 'blog/css/blog_post.css' %}">
+{% endblock head_load %}
+
+{% block content %}
+<div class="row rounded bg-light me-0">
+    <form class="p-2 mb-0" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.media }}
+        {{ form|crispy }}
+        <div class="btn-group mt-2">
+            <button type="submit" class="btn btn-success">Submit</button>
+        </div>
+    </form>
+</div>
+{% endblock content %}

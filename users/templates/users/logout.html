@@ -1,0 +1,9 @@
+{% extends 'shared/base.html' %}
+{% block content %}
+  <div class="content">
+    <h1>Logged out</h1>
+    <p>Logged out successfully.</p>
+    <a class="link" href="{% url 'users:login' %}">Log in again</a>
+  </div>
+
+{% endblock content %}

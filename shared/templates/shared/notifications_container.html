@@ -1,0 +1,19 @@
+<button id="notification-button" class="btn btn-primary me-2 d-flex align-items-center dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <span id="notification-num-badge" class="badge bg-danger position-static"></span>
+    <i class="bi bi-bell"></i>
+</button>
+<ul id="notifications-container" class="dropdown-menu">
+    {% for notification in latest_notifications %}
+        <li>
+            <div class="dropdown-item">
+                {{ notification.content }}
+            </div>
+        </li>
+    {% empty %}
+        <li>
+            <div class="dropdown-item notifications-nothing-new">
+                Nothing new yet.
+            </div>
+        </li>
+    {% endfor %}
+</ul>

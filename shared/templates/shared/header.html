@@ -1,0 +1,61 @@
+{% comment %}
+HTML skeleton - header. Used in base.html
+{% endcomment %}
+{% load static %}
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a href="{% url 'blog:home' %}" class="navbar-brand logo">
+            <img class="d-inline-block align-text-center" style="max-height: 50px;" src="{% static 'shared/img/floppa_tech_support.jpeg' %}" alt="">
+            <span class="ms-2">The Floppaverse</span>
+        </a>
+        <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" action="{% url 'blog:search_results' %}" method="get" accept-charset="utf-8">
+                        <input type="search" class="form-control form-control-dark" name="query" placeholder="Search..." aria-label="Search">
+                    </form>
+                </li>
+                <li class="nav-item">
+                    <div class="btn-group">
+                    {% if user.is_authenticated %}
+                        <div class="btn-group">
+                            {% include 'shared/notifications_container.html' %}
+                            {% include 'shared/chat_notifications_container.html' %}
+                        </div>
+                        <a href="{% url 'users:profile' user.pk %}" class="btn btn-outline btn-warning me-2">
+                            <img src="{{ user.profile.profile_pic.url }}" alt="*" class="rounded-circle me-2" style="max-height: 1.5rem;">
+                            Profile
+                        </a>
+                        <a href="{% url 'users:logout' %}" class="btn btn-outline btn-success">Log out</a>
+                    {% else %}
+                        <a href="{% url 'users:login' %}" class="btn btn-outline btn-success me-2">Log in</a>
+                        <a href="{% url 'users:register' %}" class="btn btn-outline btn-warning">Sign up</a>
+                    {% endif %}
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+{# BREADCRUMBS #}
+{% if breadcrumbs %}
+    <div class="row px-0 gx-0">
+        <nav aria-label="breadcrumb" class="d-flex rounded bg-light p-1 mt-2" style="--bs-breadcrumb-divider: '>';">
+            <ol class="breadcrumb mb-0">
+                {% for breadcrumb in breadcrumbs.items %}
+                    {% if breadcrumb.1 == request.path %}
+                        <li class="breadcrumb-item active" aria-current="page">{{ breadcrumb.0 }}</li>
+                    {% else %}
+                        <li class="breadcrumb-item"><a href="{{ breadcrumb.1 }}" class="breadcrumb-a">{{ breadcrumb.0 }}</a></li>
+                    {% endif %}
+                {% endfor %}
+            </ol>
+        </nav>
+    </div>
+{% endif %}

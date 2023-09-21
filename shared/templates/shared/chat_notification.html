@@ -1,0 +1,9 @@
+<a class="dropdown-item d-flex align-items-center notification-strip" id="user_chat_notification{{ notification.sender }}" href="{% url 'chat:room' notification.sender %}">
+    <div class="p-1 pic-container">
+        <img class="img-thumbnail" src="" alt="*">
+    </div>
+    <div class="p-1">
+        <small>{{ notification.sender_username }} | {{ notification.sent }}</small>
+        <small>{{ notification.content }}</small>
+    </div>
+</a>

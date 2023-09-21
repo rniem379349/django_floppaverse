@@ -1,0 +1,45 @@
+{% load shared %}
+
+<ul class="pagination justify-content-center mt-2">
+    {% if page_obj.has_previous %}
+        {% if page_obj.number > 3 %}
+            <li class="page-item">
+                <a href="?page=1" class="page-link">First</a>
+            </li>
+        {% endif %}
+        <li class="page-item">
+            <a href="{% add_get_param 'page' page_obj.previous_page_number %}" class="page-link">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+    {% endif %}
+
+    {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+            <li class="page-item active">
+                <a href="#" class="page-link">
+                    {{ num }}
+                </a>
+            </li>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <li class="page-item">
+                <a href="{% add_get_param 'page' num %}" class="page-link">
+                    {{ num }}
+                </a>
+            </li>
+        {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+        <li class="page-item">
+            <a href="{% add_get_param 'page' page_obj.next_page_number %}" class="page-link">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+        {% if page_obj.number < page_obj.paginator.num_pages|add:'-3' %}
+            <li class="page-item">
+                <a href="{% add_get_param 'page' paginator.num_pages %}" class="page-link">Last</a>
+            </li>
+        {% endif %}
+    {% endif %}
+</ul>

@@ -1,0 +1,25 @@
+{% extends 'shared/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="row rounded bg-light me-0">
+  <h1>Edit Your Profile</h1>
+  <h2>{{ shown_user.username }}</h2>
+  <h3>
+    {% if shown_user.first_name or shown_user.last_name %}
+      {{ shown_user.first_name }} {{ shown_user.last_name }}
+    {% endif %}
+  </h3>
+  <form class="p-2 mb-0" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <fieldset="form-group">
+        {{ user_form|crispy }}
+        {{ profile_form|crispy }}
+    </fieldset>
+    <div class="btn-group mt-2">
+        <button class="btn btn-success" type="submit">Update</button>
+    </div>
+  </form>
+</div>
+
+{% endblock content %}

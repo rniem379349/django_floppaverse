@@ -1,0 +1,35 @@
+[build-system]
+build-backend = "flit_core.buildapi"
+requires = ["flit_core >=3.8,<4"]
+
+[project]
+name = "floppaverse"
+version = "1.0.0"
+description = "Django blog/chat project using websockets"
+readme = "README.md"
+requires-python = ">=3.10"
+
+dependencies = [
+    "channels[daphne]",
+    "channels-redis",
+    "Django>3.0,<4.0",
+    "django-ckeditor",
+    "django-colorfield",
+    "django-crispy-forms",
+    "django-selectable",
+    "crispy-bootstrap4",
+    "django-debug-toolbar",
+    "django-filter",
+    "redis",
+    "psycopg2-binary>=2.9",
+    "Pillow",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest-django",
+    "pip-tools",
+]
+
+[tool.pip-tools]
+generate-hashes = true
