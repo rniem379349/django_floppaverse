@@ -28,8 +28,12 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pytest-django",
+    "factory_boy",
     "pip-tools",
 ]
 
 [tool.pip-tools]
 generate-hashes = true
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "floppaverse.settings"

@@ -3,7 +3,9 @@ repos:
     rev: v2.3.0
     hooks:
     -   id: check-yaml
+    -   id: check-toml
     -   id: end-of-file-fixer
+        exclude: ^requirements
     -   id: trailing-whitespace
 -   repo: https://github.com/psf/black
     rev: 22.10.0
