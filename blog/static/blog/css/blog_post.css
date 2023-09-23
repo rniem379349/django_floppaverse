@@ -1,0 +1,6 @@
+.card-img-top {
+    display: inherit;
+    width: auto;
+    max-width: 100%;
+    margin: auto;
+}

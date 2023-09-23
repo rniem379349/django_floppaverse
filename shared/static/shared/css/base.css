@@ -1,0 +1,43 @@
+#navbarNav {
+	justify-content: flex-end;
+}
+
+.message-generic {
+	padding: .75rem;
+	border-radius: 0.3rem;
+}
+
+.breadcrumb-a {
+	font-size: 1rem;
+	text-decoration: none;
+}
+
+.popover-content {
+	width: 15rem;
+}
+
+#notifications-container, #chat-notifications-container {
+	max-width: 400px;
+	overflow-x: hidden;
+	text-overflow: ellipsis;
+}
+
+.notification-strip {
+	height: 40px;
+	padding: .25rem;
+}
+
+.notification-strip .pic-container {
+	width: 40px;
+	height: 40px;
+	flex-shrink: 0;
+}
+
+.notification-timestamp {
+	font-size: 0.75rem;
+	color: #a0a0a0;
+}
+
+.django-ckeditor-widget {
+	width: 100%;
+}
