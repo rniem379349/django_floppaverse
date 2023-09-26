@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 from chat.models import ChatMessage, ChatRoom
+from shared.prometheus import chat_msgs_sent
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
@@ -129,3 +130,4 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 }
             )
         )
+        chat_msgs_sent.inc()

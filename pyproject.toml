@@ -20,6 +20,7 @@ dependencies = [
     "crispy-bootstrap4",
     "django-debug-toolbar",
     "django-filter",
+    "django-prometheus",
     "redis",
     "psycopg2-binary>=2.9",
     "Pillow",

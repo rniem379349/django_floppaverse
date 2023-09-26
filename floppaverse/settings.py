@@ -25,7 +25,9 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG", False)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "web",
+]
 
 if DEBUG:
     import socket
@@ -50,6 +52,7 @@ THIRD_PARTY_APPS = [
     "crispy_forms",
     "crispy_bootstrap4",
     "debug_toolbar",
+    "django_prometheus",
     "django_filters",
 ]
 
@@ -73,6 +76,7 @@ INSTALLED_APPS = (
 )
 
 MIDDLEWARE = [
+    "shared.prometheus.FloppaverseMetricsBeforeMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -81,6 +85,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "shared.prometheus.FloppaverseMetricsAfterMiddleware",
 ]
 
 ROOT_URLCONF = "floppaverse.urls"
@@ -109,7 +114,7 @@ WSGI_APPLICATION = "floppaverse.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
+        "ENGINE": "django_prometheus.db.backends.postgresql",
         "NAME": os.environ.get("POSTGRES_DB"),
         "USER": os.environ.get("POSTGRES_USER"),
         "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),

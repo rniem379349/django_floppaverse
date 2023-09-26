@@ -3,7 +3,7 @@
   <div class="row rounded bg-light mb-2 me-0">
     <div class="content d-flex flex-wrap flex-row justify-content-between">
       <div class="d-inline-flex flex-column align-items-center flex-fill p-2 w-25">
-        <img src="{{ shown_user.profile.profile_pic.url }}" alt="*" class="rounded-circle border-2" style="max-width: 10rem;">
+        <img src="{{ shown_user.profile.profile_pic.url }}" alt="*" class="rounded-circle border-2" style="max-width: 10rem; width: 100%;">
         <h3>{{ shown_user.username }}</h3>
         <h3>
           {% if shown_user.first_name or shown_user.last_name %}
@@ -29,7 +29,9 @@
           {% if shown_user.profile.latest_posts %}
             {% for post in shown_user.profile.latest_posts %}
             <a href="{% url 'blog:blog_post_detail' post.pk %}" class="border rounded text-dark text-decoration-none mt-1">
-              <img src="{{ post.get_thumbnail }}" class="card-img-top img-fluid" alt="">
+              {% if post.get_thumbnail %}
+                <img src="{{ post.get_thumbnail }}" class="card-img-top img-fluid" alt="">
+              {% endif %}
               <div class="d-inline-flex w-100 justify-content-between align-items-center p-1">
                 <h2 class="overflow-hidden mb-0">{{ post.title }}</h2>
                 <small>{{ post.updated_timestamp|date:"D d M Y" }}</small>

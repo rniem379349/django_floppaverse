@@ -28,6 +28,7 @@ urlpatterns = [
     path("chat/", include(("chat.urls", "chat"), namespace="chat")),
     path("users/", include(("users.urls", "users"), namespace="users")),
     path("__debug__/", include("debug_toolbar.urls")),
+    path("", include("django_prometheus.urls")),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

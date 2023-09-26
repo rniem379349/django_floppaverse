@@ -42,7 +42,7 @@ def get_time_elapsed_humanized(timestamp):
             unit_of_time_num = difference.days // 365
     elif difference.days == 0:
         if difference.seconds < 300:
-            return "just now"
+            return "seconds"
         elif 300 <= difference.seconds < 3600:
             unit_of_time_str = "minutes"
             unit_of_time_num = difference.seconds // 60

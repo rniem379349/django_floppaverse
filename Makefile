@@ -1,4 +1,4 @@
-.PHONY: test
+.PHONY: test requirements
 RUN := docker compose run --rm web
 
 requirements:

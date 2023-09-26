@@ -1,6 +1,6 @@
 from django.template import Library
 
-from shared.mixins.helper import get_time_elapsed_humanized
+from shared.utils.time import get_time_elapsed_humanized
 
 register = Library()
 
