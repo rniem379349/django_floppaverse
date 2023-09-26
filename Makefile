@@ -10,3 +10,6 @@ test:
 
 collectstatic:
 	$(RUN) python manage.py collectstatic
+
+ipy:
+	$(RUN) ipython

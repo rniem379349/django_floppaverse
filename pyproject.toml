@@ -24,6 +24,7 @@ dependencies = [
     "redis",
     "psycopg2-binary>=2.9",
     "Pillow",
+    "user-agents",
 ]
 
 [project.optional-dependencies]
@@ -31,6 +32,7 @@ dev = [
     "pytest-django",
     "factory_boy",
     "pip-tools",
+    "ipython",
 ]
 
 [tool.pip-tools]

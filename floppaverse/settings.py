@@ -27,6 +27,7 @@ DEBUG = os.environ.get("DEBUG", False)
 
 ALLOWED_HOSTS = [
     "web",
+    "localhost",
 ]
 
 if DEBUG:

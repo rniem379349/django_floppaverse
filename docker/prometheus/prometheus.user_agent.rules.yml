@@ -1,0 +1,23 @@
+groups:
+- name: http-user-agent
+  rules:
+  # total django HTTP requests grouped by user agent browser
+  - record: floppaverse_http_requests_by_user_agent_browser
+    expr: sum by(user_agent_browser) (django_http_requests_total_by_view_transport_method_total)
+  # total django HTTP requests grouped by user agent OS
+  - record: floppaverse_http_requests_by_user_agent_os
+    expr: sum by(user_agent_os) (django_http_requests_total_by_view_transport_method_total)
+  # total django HTTP requests grouped by user agent device
+  - record: floppaverse_http_requests_by_user_agent_device
+    expr: sum by(user_agent_device) (django_http_requests_total_by_view_transport_method_total)
+  # total django HTTP requests grouped by is_mobile
+  - record: floppaverse_http_requests_by_user_agent_is_mobile
+    expr: sum by(user_agent_is_mobile) (django_http_requests_total_by_view_transport_method_total)
+  # django % of HTTP requests originating from Firefox user agents
+  - record: floppaverse_http_requests_percentage_using_firefox
+    expr: |
+      (
+          sum(django_http_requests_total_by_view_transport_method_total{user_agent_browser="firefox"})
+        /
+          sum(django_http_requests_total_by_view_transport_method_total)
+      ) * 100

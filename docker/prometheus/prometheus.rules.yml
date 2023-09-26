@@ -12,17 +12,6 @@ groups:
         /
         sum by(view) (rate(django_http_responses_total_by_status_view_method_total[5m]))
       ) * 100 > 5
-  # total django HTTP requests grouped by user agent browser
-  - record: floppaverse_http_requests_by_user_agent_browser
-    expr: sum by(user_agent_browser) (django_http_requests_total_by_view_transport_method_total)
-  # django % of HTTP requests originating from Firefox user agents
-  - record: floppaverse_http_requests_percentage_using_firefox
-    expr: |
-      (
-          sum(django_http_requests_total_by_view_transport_method_total{user_agent_browser="firefox"})
-        /
-          sum(django_http_requests_total_by_view_transport_method_total)
-      ) * 100
 
   # Alerts
   - alert: HTTP 500 error rate greater than 5%
