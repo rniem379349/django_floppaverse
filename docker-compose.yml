@@ -52,6 +52,17 @@ services:
     volumes:
       - ./docker/prometheus:/etc/prometheus
       - prometheus_data:/prometheus
+  node_exporter:
+    image: quay.io/prometheus/node-exporter:latest
+    container_name: node_exporter
+    restart: unless-stopped
+    volumes:
+      - /:/rootfs:ro
+    command:
+      - '--path.rootfs=/rootfs'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc|var/lib/docker/.+)($|/)'
+    ports:
+      - "9100:9100"
 
 volumes:
   pgdata:

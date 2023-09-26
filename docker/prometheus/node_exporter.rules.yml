@@ -1,0 +1,22 @@
+groups:
+- name: node-exporter
+  rules:
+  # Available ext4 fs space (in GB)
+  - record: node_host_available_fs_space_ext4
+    expr: node_filesystem_avail_bytes{fstype="ext4"} / (1024*1024*1024)
+  # The average network traffic received, per second, over the last minute (in bytes)
+  - record: node_host_network_recv_bytes_over_last_min
+    expr: rate(node_network_receive_bytes_total[1m])
+
+  # Alerts
+  - alert: Disk almost full
+    expr: node_filesystem_avail_bytes{fstype="ext4"} / (1024*1024*1024) < 10
+    # raise alert if it keeps firing for 5 minutes
+    for: 5m
+    # How long an alert will continue firing after the condition that triggered it
+    # has cleared.
+    keep_firing_for: 15m
+    labels:
+      severity: "high"
+    annotations:
+      summary: "Data partition {{ $labels.mountpoint }} almost full (less than 10GB free space left)"
