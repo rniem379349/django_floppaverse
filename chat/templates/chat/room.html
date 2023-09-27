@@ -37,7 +37,7 @@
             </button>
         </div>
     </div>
-    {{ target_user.pk|json_script:"room-name" }} {# used by the ws script to connect to the private chat with target_user #}
+    {{ room.pk|json_script:"room-name" }} {# used by the ws script to connect to the private chat with target_user #}
 </div>
 
 {# Chat websocket script #}

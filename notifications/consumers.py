@@ -78,6 +78,7 @@ class NotificationConsumer(AsyncWebsocketConsumer):
                     "chat_notification": event.get("chat_notification", False),
                     "sent": event.get("sent", ""),
                     "sender": event.get("sender", ""),
+                    "room": event.get("room", ""),
                     "sender_pic": event.get("sender_pic", ""),
                     "sender_username": event.get("sender_username", ""),
                     "notification_url": event.get("notification_url", ""),

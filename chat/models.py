@@ -9,6 +9,10 @@ class ChatRoom(models.Model):
 
     objects = ChatRoomManager()
 
+    @classmethod
+    def get_chat_room_name_str(cls, participants):
+        return "__".join(sorted([p.username for p in participants]))
+
     @property
     def latest_message(self):
         return self.has_messages.latest("sent")

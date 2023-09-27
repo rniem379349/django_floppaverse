@@ -30,7 +30,7 @@ notifSocket.onmessage = function(e) {
     if (data.chat_notification) {
         list_item_html = `
         <li>
-            <a class="dropdown-item d-flex align-items-center notification-strip" id="user_chat_notification_${data.sender}" href="/chat/private/${data.sender}">
+            <a class="dropdown-item d-flex align-items-center notification-strip" id="user_chat_notification_${data.sender}" href="/chat/private/${data.room}">
                 <div class="p-1 pic-container">
                     <img class="img-thumbnail p-0 h-100 rounded-circle" src="${data.sender_pic}" alt="*">
                 </div>

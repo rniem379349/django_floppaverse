@@ -18,8 +18,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
         return User.objects.select_related("profile").get(pk=pk)
 
     @database_sync_to_async
-    def save_chat_message(self, message, room_name):
-        chat_room = ChatRoom.objects.get_or_create(name=room_name)
+    def get_target_chat_user(self, room_pk, user_pk):
+        return ChatRoom.objects.get(pk=room_pk).participants.exclude(pk=user_pk).first()
+
+    @database_sync_to_async
+    def save_chat_message(self, message, room_pk):
+        chat_room = ChatRoom.objects.get_or_create(pk=room_pk)
         chat_room[0].participants.add(message["sender"], message["receiver"])
         return ChatMessage.objects.create(
             in_chat_room=chat_room[0],
@@ -29,9 +33,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
     async def connect(self):
-        target_user_pk = self.scope["url_route"]["kwargs"]["target_user_pk"]
+        self.room_pk = self.scope["url_route"]["kwargs"]["room_pk"]
         self.origin_user = await self.get_user_with_profile(self.scope.get("user").pk)
-        self.target_user = await self.get_user_with_profile(target_user_pk)
+        self.target_user = await self.get_target_chat_user(
+            self.room_pk, self.origin_user.pk
+        )
         self.target_user_chat_notification_channel_name = (
             f"chat_notifications__{self.target_user}"
         )
@@ -105,13 +111,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 "chat_notification": True,
                 "sent": now.strftime("%b %d, %Y, %H:%M"),
                 "sender": self.origin_user.pk,
+                "room": self.room_pk,
                 "sender_username": self.origin_user.username,
                 "sender_pic": self.origin_user.profile.profile_pic.url,
                 "message": message_content_short,
             },
         )
         # Save message in DB
-        await self.save_chat_message(message, self.room_group_name)
+        await self.save_chat_message(message, self.room_pk)
 
     # Receive message from room group
     async def chat_message(self, event):

@@ -12,6 +12,9 @@ groups:
         /
         sum by(view) (rate(django_http_responses_total_by_status_view_method_total[5m]))
       ) * 100 > 5
+  # HTTP request latency for each django view (excluding prometheus metric scraping)
+  - record: floppaverse_http_request_latency_by_view
+    expr: sum by(view, le) (rate(django_http_requests_latency_seconds_by_view_method_bucket{view!="prometheus-django-metrics"}[10m]))
 
   # Alerts
   - alert: HTTP 500 error rate greater than 5%
