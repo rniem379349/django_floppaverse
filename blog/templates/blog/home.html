@@ -15,14 +15,14 @@
 {% endblock title_nav_tools %}
 
 {% block content %}
-<div class="row gx-5 me-0" style="margin-top: -0.5rem;">
+<div class="row gx-md-5 me-0" style="margin-top: -0.5rem;">
     <div class="col-md-9">
         {% for post in page_obj %}
             <div class="row">
-                <div class="card mt-2 px-0">
-                    <a href="{% url 'blog:blog_post_detail' post.pk %}" class="text-dark text-decoration-none">
+                <div class="card mt-2 px-0 border-0">
+                    <a href="{% url 'blog:blog_post_detail' post.pk %}" class="text-decoration-none">
                         <img src="{{ post.get_thumbnail }}" class="card-img-top img-fluid" alt="">
-                        <div class="card-body">
+                        <div class="card-body blog-post-body{% if not post.get_thumbnail %}-no-thumb{% endif %}">
                             <div class="title-div d-flex align-items-center justify-content-between">
                                 <h5 class="card-title">{{ post.title }} {% if post.is_recent %}<span class="badge bg-primary">New</span>{% endif %}</h5>
                                 <div class="btn-group btn-group-sm" role="group" aria-label="...">
@@ -41,10 +41,10 @@
                                     {% endif %}
                                 </div>
                             </div>
-                            <a href="{% url 'users:profile' post.author.pk %}" class="text-dark text-decoration-none">
+                            <a href="{% url 'users:profile' post.author.pk %}" class="text-decoration-none">
                                 <div class="d-flex">
                                     <img src="{{ post.author.profile.profile_pic.url }}" alt="" class="rounded-circle me-2" style="max-height: 1.5rem;">
-                                    <h6>{{ post.author }} <small class="text-muted"> Last updated {{ post.updated_timestamp|date:"D d M Y" }}</small></h6>
+                                    <h6>{{ post.author }} <small class="post-info-small-text"> Last updated {{ post.updated_timestamp|date:"D d M Y" }}</small></h6>
                                 </div>
                             </a>
                             <p class="card-text">{{ post.content|striptags|safe|truncatewords_html:20 }}</p>
@@ -83,7 +83,7 @@
         </div>
         {# Newsletter section #}
         <div class="card newsletter-form bg-light py-5 border-0 border-top">
-            <img src="{% static 'bootstrap-icons-1.7.2/pencil-square.svg' %}" class="card-img-top mx-auto w-25" alt="Author">
+            <i class="bi bi-pencil-square mx-auto fs-1"></i>
             <div class="card-body text-center">
                 <h5 class="card-title">Sing up for the newsletter!</h5>
                 <small class="card-text">You will get periodical updates (~1 per week), as well as recommendations and tips about web development. It's completely free, and you can cancel anytime.</small>

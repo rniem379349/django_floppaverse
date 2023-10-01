@@ -41,3 +41,9 @@
 .django-ckeditor-widget {
 	width: 100%;
 }
+
+@media (max-width: 576px) {
+	.container {
+		padding-right: 0;
+	}
+}
