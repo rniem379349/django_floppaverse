@@ -21,3 +21,7 @@ scrape_configs:
     static_configs:
       - targets:
         - web:8000
+  - job_name: grafana_metrics
+    static_configs:
+      - targets:
+        - grafana:3000
