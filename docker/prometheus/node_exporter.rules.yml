@@ -20,3 +20,8 @@ groups:
       severity: "high"
     annotations:
       summary: "Data partition {{ $labels.mountpoint }} almost full (less than 10GB free space left)"
+  - alert: CPU usage > 80% (10 min)
+    expr: 100 - avg by (instance) (irate(node_cpu_seconds_total{mode="idle"}[1m])) * 100 > 80
+    for: 10m
+    labels:
+      severity: "high"
