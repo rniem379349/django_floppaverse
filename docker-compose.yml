@@ -63,6 +63,16 @@ services:
       - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc|var/lib/docker/.+)($|/)'
     ports:
       - "9100:9100"
+  prom_alertmanager:
+    image: quay.io/prometheus/alertmanager
+    container_name: prom_alertmanager
+    restart: unless-stopped
+    volumes:
+      - ./docker/prometheus/alertmanager.yml:/etc/alertmanager.yml
+    command:
+      - "--config.file=/etc/alertmanager.yml"
+    ports:
+      - "9093:9093"
   grafana:
     image: grafana/grafana-enterprise
     container_name: grafana

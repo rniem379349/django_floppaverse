@@ -25,3 +25,9 @@ scrape_configs:
     static_configs:
       - targets:
         - grafana:3000
+
+alerting:
+  alertmanagers:
+    - static_configs:
+      - targets:
+        - prom_alertmanager:9093
