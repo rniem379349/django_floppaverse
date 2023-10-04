@@ -18,6 +18,7 @@ groups:
     keep_firing_for: 15m
     labels:
       severity: "high"
+      type: "devops"
     annotations:
       summary: "Data partition {{ $labels.mountpoint }} almost full (less than 10GiB free space left)"
   - alert: CPU usage > 80% (10 min)
@@ -25,3 +26,6 @@ groups:
     for: 10m
     labels:
       severity: "high"
+      type: "devops"
+    annotations:
+      summary: "Server CPU usage exceeds 80% for more than 10 minutes."

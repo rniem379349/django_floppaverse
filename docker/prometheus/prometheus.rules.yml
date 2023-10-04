@@ -34,5 +34,6 @@ groups:
     keep_firing_for: 1m
     labels:
       severity: "high"
+      type: "webapp"
     annotations:
       summary: "HTTP 500 rate for view {{ $labels.view }} exceeds 5%: {{ $value }}%"

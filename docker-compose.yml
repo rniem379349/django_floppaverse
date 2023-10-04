@@ -83,6 +83,14 @@ services:
       - ./docker/grafana/grafana.ini:/etc/grafana/grafana.ini
       - ./docker/grafana/datasources:/etc/grafana/provisioning/datasources
       - grafana_data:/var/lib/grafana
+  # Mailhog for local Prometheus alert email testing
+  mailhog:
+    image: mailhog/mailhog
+    logging:
+      driver: "none"
+    ports:
+      - 1025:1025 # SMTP server
+      - 8025:8025 # HTTP UI
 
 volumes:
   pgdata:

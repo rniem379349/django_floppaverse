@@ -1,7 +1,9 @@
 global:
   # The smarthost and SMTP sender used for mail notifications.
-  smtp_smarthost: 'localhost:25'
+  smtp_smarthost: 'mailhog:1025' # MailHog local SMTP server
   smtp_from: 'alertmanager@floppa.org'
+  # MailHog doesn't support TLS out of the box, so for testing purposes we switch it off
+  smtp_require_tls: false
 
 # The root route on which each incoming alert enters.
 route:
@@ -44,24 +46,24 @@ route:
   # This routes performs a regular expression match on alert labels to
   # catch alerts that are related to a list of services.
   - match:
-      instance: web:8000
+      type: "webapp"
     receiver: floppaverse-webdev-mails
 
     # The service has a sub-route for critical alerts, any alerts
     # that do not match, i.e. severity != critical, fall-back to the
-    # parent node and are sent to 'team-X-mails'
+    # parent node and are sent to 'tfloppaverse-webdev-mails'
     routes:
     - match:
         severity: critical
       receiver: floppaverse-webdev-pager
 
   - match_re:
-      instance: ^(grafana:3000|prometheus:9090|node_exporter:9100)$
+      type: "devops"
     receiver: floppaverse-devops-mails
 
     # The service has a sub-route for critical alerts, any alerts
     # that do not match, i.e. severity != critical, fall-back to the
-    # parent node and are sent to 'team-X-mails'
+    # parent node and are sent to 'floppaverse-devops-mails'
     routes:
     - match:
         severity: critical
@@ -85,6 +87,7 @@ inhibit_rules:
   equal: ['alertname']
 
 receivers:
+# Email
 - name: 'floppaverse-dev-mails'
   email_configs:
   - to: 'floppa_alerts@example.org'
@@ -93,16 +96,17 @@ receivers:
   email_configs:
   - to: 'floppa_webdev_alerts@example.org'
 
-- name: 'floppaverse-webdev-pager'
-  email_configs:
-  - to: 'floppa_webdev_alerts_critical@example.org'
-  pagerduty_configs:
-  - routing_key: <team-X-key>
-
 - name: 'floppaverse-devops-mails'
   email_configs:
   - to: 'floppa_devops_alerts@example.org'
 
+# Pagers (not implemented)
+- name: 'floppaverse-webdev-pager'
+  email_configs:
+  - to: 'floppa_webdev_alerts_critical@example.org'
+  pagerduty_configs:
+  - routing_key: <webdev-team-key>
+
 - name: 'floppaverse-devops-pager'
   pagerduty_configs:
-  - routing_key: <team-Y-key>
+  - routing_key: <devops-team-key>
