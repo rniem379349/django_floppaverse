@@ -1,10 +1,21 @@
 # django-floppaverse
 A Django web app with blog, chat and notification functionality.
 
-## Tech stack
-- `Django` - for web app functionality
+## Features
+### Web app
+- `Django` - web app framework (chat/blog/user management),
 - `redis` - to facilitate chat/notifications using `django-channels`,
-- `postgres` - database
+- `postgres` - SQL database.
+### Devops setup
+- Github actions CI/CD pipeline (workflows defined in `.github/workflows`),
+- Prometheus metric scraping - targets are:
+    1. Django app (using `django-prometheus`),
+    2. Server (through `node-exporter`),
+    3. Grafana dashboarding tool,
+    4. Prometheus itself.
+- Grafana for constructing dashboards with visualisations of Prometheus metrics,
+- Alertmanager for sending alerts when Prometheus detects certain conditions (alerts are defined in `docker/prometheus/*.rules.yml` files),
+- MailHog for local SMTP server setup (allows for local alert email testing).
 
 ## Deployment
 1. Clone the repo
