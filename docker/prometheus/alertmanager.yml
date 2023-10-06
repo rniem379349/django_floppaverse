@@ -4,13 +4,14 @@ global:
   smtp_from: 'alertmanager@floppa.org'
   # MailHog doesn't support TLS out of the box, so for testing purposes we switch it off
   smtp_require_tls: false
-
+  # Slack API URLs are defined in the 'receivers' section
+  slack_api_url: ''
 # The root route on which each incoming alert enters.
 route:
   # The root route must not have any matchers as it is the entry point for
   # all alerts. It needs to have a receiver configured so alerts that do not
   # match any of the sub-routes are sent to someone.
-  receiver: 'floppaverse-dev-mails'
+  receiver: 'floppaverse-dev-alerts'
 
   # The labels by which incoming alerts are grouped together. For example,
   # multiple alerts coming in for cluster=A and alertname=LatencyHigh would
@@ -47,11 +48,11 @@ route:
   # catch alerts that are related to a list of services.
   - match:
       type: "webapp"
-    receiver: floppaverse-webdev-mails
+    receiver: floppaverse-webdev-alerts
 
     # The service has a sub-route for critical alerts, any alerts
     # that do not match, i.e. severity != critical, fall-back to the
-    # parent node and are sent to 'tfloppaverse-webdev-mails'
+    # parent node and are sent to 'floppaverse-webdev-alerts'
     routes:
     - match:
         severity: critical
@@ -59,11 +60,11 @@ route:
 
   - match_re:
       type: "devops"
-    receiver: floppaverse-devops-mails
+    receiver: floppaverse-devops-alerts
 
     # The service has a sub-route for critical alerts, any alerts
     # that do not match, i.e. severity != critical, fall-back to the
-    # parent node and are sent to 'floppaverse-devops-mails'
+    # parent node and are sent to 'floppaverse-devops-alerts'
     routes:
     - match:
         severity: critical
@@ -87,26 +88,35 @@ inhibit_rules:
   equal: ['alertname']
 
 receivers:
-# Email
-- name: 'floppaverse-dev-mails'
+# Email, Slack
+- name: 'floppaverse-dev-alerts'
   email_configs:
-  - to: 'floppa_alerts@example.org'
+    - to: 'floppa_alerts@example.org'
+  slack_configs:
+    - channel: '#alerts_dev'
+    - api_url: <slack_alert_webhook_api_url>
 
-- name: 'floppaverse-webdev-mails'
+- name: 'floppaverse-webdev-alerts'
   email_configs:
-  - to: 'floppa_webdev_alerts@example.org'
+    - to: 'floppa_webdev_alerts@example.org'
+  slack_configs:
+    - channel: '#alerts_webdev'
+    - api_url: <slack_webdev_alert_webhook_api_url>
 
-- name: 'floppaverse-devops-mails'
+- name: 'floppaverse-devops-alerts'
   email_configs:
-  - to: 'floppa_devops_alerts@example.org'
+    - to: 'floppa_devops_alerts@example.org'
+  slack_configs:
+    - channel: '#alerts_devops'
+    - api_url: <slack_devops_alert_webhook_api_url>
 
 # Pagers (not implemented)
 - name: 'floppaverse-webdev-pager'
   email_configs:
-  - to: 'floppa_webdev_alerts_critical@example.org'
+    - to: 'floppa_webdev_alerts_critical@example.org'
   pagerduty_configs:
-  - routing_key: <webdev-team-key>
+    - routing_key: <webdev-team-key>
 
 - name: 'floppaverse-devops-pager'
   pagerduty_configs:
-  - routing_key: <devops-team-key>
+    - routing_key: <devops-team-key>
