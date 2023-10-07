@@ -18,14 +18,23 @@ groups:
     keep_firing_for: 15m
     labels:
       severity: "high"
-      type: "devops"
+      alerttype: "devops"
     annotations:
-      summary: "Data partition {{ $labels.mountpoint }} almost full (less than 10GiB free space left)"
+      summary: "{{ $labels.mountpoint }} low on free space"
+      description: "Data partition {{ $labels.mountpoint }} almost full (less than 10GiB free space left)"
+      suggested_troubleshooting_steps: |
+        Check the filesystem for large files (use e.g. 'du' to find large files).
+        Usual culprits are log files - consider log rotation/offloading to a separate server
   - alert: CPU usage > 80% (10 min)
     expr: 100 - avg by (instance) (irate(node_cpu_seconds_total{mode="idle"}[1m])) * 100 > 80
     for: 10m
     labels:
       severity: "high"
-      type: "devops"
+      alerttype: "devops"
     annotations:
-      summary: "Server CPU usage exceeds 80% for more than 10 minutes."
+      summary: "CPU usage > 80%"
+      description: "Server CPU usage exceeds 80% for more than 10 minutes."
+      suggested_troubleshooting_steps: |
+        Check which processes are causing the most CPU usage (use e.g. 'top').
+        High CPU usage can also be caused by a commit introducing some CPU-heavy logic.
+        It might be worth it to investigate the commit history ('git log', 'git blame', 'git bisect' etc.)

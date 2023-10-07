@@ -34,6 +34,12 @@ groups:
     keep_firing_for: 1m
     labels:
       severity: "high"
-      type: "webapp"
+      alerttype: "webapp"
     annotations:
-      summary: "HTTP 500 rate for view {{ $labels.view }} exceeds 5%: {{ $value }}%"
+      summary: "High HTTP 500 for {{ $labels.view }}"
+      description: "HTTP 500 rate for view {{ $labels.view }} exceeds 5%: {{ $value }}%"
+      suggested_troubleshooting_steps: |
+        Debug the affected view locally. Make sure you are running the same branch as the server where the error occurred.
+        By doing so you can find out if the error is caused by the view, or if it is a server issue.
+        If the issue seems to be a bug in the code, check what recent commits changed the affected view.
+        Use commands such as `git blame` and `git bisect` to help you determine which commit introduced the bug.
