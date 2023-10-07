@@ -1,6 +1,14 @@
 name: Check Codebase using pre-commit
 
-on: [push]
+on:
+  push:
+    branches:
+      - "master"
+  pull_request:
+    types:
+      - "opened"
+    branches:
+      - "master"
 
 jobs:
   pre_commit:

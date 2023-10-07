@@ -2,6 +2,17 @@ name: Run pytest suite
 
 on:
   push:
+    branches:
+      - "master"
+    paths:
+      - "**.py"
+  pull_request:
+    types:
+      - "opened"
+    branches:
+      - "master"
+    paths:
+      - "**.py"
 
 jobs:
   test:
