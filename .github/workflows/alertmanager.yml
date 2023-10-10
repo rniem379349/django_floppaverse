@@ -18,8 +18,8 @@ jobs:
       - name: Install amtool
         run: "sudo apt-get update && sudo apt-get install -y prometheus-alertmanager"
       - name: Validate alertmanager config
-        run: "/bin/amtool check-config ./docker/prometheus/alertmanager.yml"
+        run: "/bin/amtool check-config ./docker/prometheus/alertmanager/alertmanager.yml"
       - name: Test alertmanager config routes
         run: |
-          /bin/amtool config routes test --config.file=./docker/prometheus/alertmanager.yml --verify.receivers=floppaverse-webdev-alerts alerttype=webdev
-          /bin/amtool config routes test --config.file=./docker/prometheus/alertmanager.yml --verify.receivers=floppaverse-devops-alerts alerttype=devops
+          /bin/amtool config routes test --config.file=./docker/prometheus/alertmanager/alertmanager.yml --verify.receivers=floppaverse-webdev-alerts alerttype=webdev
+          /bin/amtool config routes test --config.file=./docker/prometheus/alertmanager/alertmanager.yml --verify.receivers=floppaverse-devops-alerts alerttype=devops

@@ -68,7 +68,8 @@ services:
     container_name: prom_alertmanager
     restart: unless-stopped
     volumes:
-      - ./docker/prometheus/alertmanager.yml:/etc/alertmanager.yml
+      - ./docker/prometheus/alertmanager/alertmanager.yml:/etc/alertmanager.yml
+      - ./docker/prometheus/alertmanager/templates:/etc/alertmanager/templates
     command:
       - "--config.file=/etc/alertmanager.yml"
     ports:

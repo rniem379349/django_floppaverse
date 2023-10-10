@@ -1,0 +1,33 @@
+# Regular messages
+{{ define "slack.floppaverse.title" }}
+[{{ .CommonLabels.severity | toUpper }}] [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .GroupLabels.SortedPairs.Values | join " " }} {{ if gt (len .CommonLabels) (len .GroupLabels) }}({{ with .CommonLabels.Remove .GroupLabels.Names }}{{ .Values | join " " }}{{ end }}){{ end }}
+{{ end }}
+
+{{ define "slack.floppaverse.text" }}
+<!channel>
+{{ range $index, $value := .Alerts }}
+Alert no {{ $index }}:
+Summary: {{ .Annotations.summary }}
+Description: {{ .Annotations.description }}
+
+{{ end }}
+Suggested first steps: {{ .CommonAnnotations.suggested_troubleshooting_steps }}
+{{ end }}
+
+
+# Critical messages
+{{ define "slack.floppaverse.title_critical" }}
+[{{ .CommonLabels.severity | toUpper }} - ACTION REQUIRED] [{{ .Status | toUpper }}{{ if eq .Status "firing" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .GroupLabels.SortedPairs.Values | join " " }} {{ if gt (len .CommonLabels) (len .GroupLabels) }}({{ with .CommonLabels.Remove .GroupLabels.Names }}{{ .Values | join " " }}{{ end }}){{ end }}
+{{ end }}
+
+{{ define "slack.floppaverse.text_critical" }}
+<!channel>
+This is a critical alert. If possible, please attend to this issue immediately.
+{{ range $index, $value := .Alerts }}
+Alert no {{ $index }}:
+Summary: {{ .Annotations.summary }}
+Description: {{ .Annotations.description }}
+
+{{ end }}
+Suggested first steps: {{ .CommonAnnotations.suggested_troubleshooting_steps }}
+{{ end }}

@@ -6,7 +6,7 @@ global:
   smtp_require_tls: false
   # Default (fallback) Slack API URL
   # More specific Slack API URLs are defined in the 'receivers' section
-  slack_api_url: 'https://hooks.slack.com/services/AAAAAAAAAAAA/AAAAAAAAAAAA/AAAAAAAAAAAAAAAAAAAAAAA' # placeholder
+  slack_api_url: 'https://hooks.slack.com/services/AAAAAAAAAAA/AAAAAAAAAAA/AAAAAAAAAAAAAAAAAAAAAAAA' # placeholder
 
 # The root route on which each incoming alert enters.
 route:
@@ -58,7 +58,7 @@ route:
       routes:
         - matchers:
             - severity="critical"
-          receiver: floppaverse-webdev-pager
+          receiver: floppaverse-webdev-critical
 
     - matchers:
         - alerttype="devops"
@@ -70,7 +70,7 @@ route:
       routes:
         - matchers:
             - severity="critical"
-          receiver: floppaverse-devops-pager
+          receiver: floppaverse-devops-critical
 
 # Inhibition rules allow to mute a set of alerts given that another alert is
 # firing.
@@ -103,37 +103,47 @@ receivers:
   email_configs:
     - to: 'floppa_webdev_alerts@floppa.org'
       headers:
-        subject: "[{{ .CommonLabels.severity | toUpper }}] [{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .GroupLabels.SortedPairs.Values | join \" \" }} {{ if gt (len .CommonLabels) (len .GroupLabels) }}({{ with .CommonLabels.Remove .GroupLabels.Names }}{{ .Values | join \" \" }}{{ end }}){{ end }}"
+        subject: '{{ template "email.floppaverse.title" . }}'
   slack_configs:
-    - api_url: 'https://hooks.slack.com/services/AAAAAAAAAAAA/AAAAAAAAAAAA/AAAAAAAAAAAAAAAAAAAAAAA' # placeholder
+    - api_url: 'https://hooks.slack.com/services/AAAAAAAAAAA/AAAAAAAAAAA/AAAAAAAAAAAAAAAAAAAAAAAA' # placeholder
       channel: '#alerts_webdev'
-      title: "[{{ .CommonLabels.severity | toUpper }}] [{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .GroupLabels.SortedPairs.Values | join \" \" }} {{ if gt (len .CommonLabels) (len .GroupLabels) }}({{ with .CommonLabels.Remove .GroupLabels.Names }}{{ .Values | join \" \" }}{{ end }}){{ end }}"
-      text: "<!channel> \nSummary: {{ .CommonAnnotations.summary }}\nDescription: {{ .CommonAnnotations.description }}\nSuggested first steps: {{ .CommonAnnotations.suggested_troubleshooting_steps }}"
+      title: '{{ template "slack.floppaverse.title" . }}'
+      text: '{{ template "slack.floppaverse.text" . }}'
 
 - name: 'floppaverse-devops-alerts'
   email_configs:
     - to: 'devops_alerts@floppa.org'
       headers:
-        subject: "[{{ .CommonLabels.severity | toUpper }}] [{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}]: {{ .CommonAnnotations.summary }}"
+        subject: '{{ template "email.floppaverse.title" . }}'
   slack_configs:
-    - api_url: 'https://hooks.slack.com/services/AAAAAAAAAAAA/AAAAAAAAAAAA/AAAAAAAAAAAAAAAAAAAAAAA' # placeholder
+    - api_url: 'https://hooks.slack.com/services/AAAAAAAAAAA/AAAAAAAAAAA/AAAAAAAAAAAAAAAAAAAAAAAA' # placeholder
       channel: '#alerts_devops'
-      title: "[{{ .CommonLabels.severity | toUpper }}] [{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .GroupLabels.SortedPairs.Values | join \" \" }} {{ if gt (len .CommonLabels) (len .GroupLabels) }}({{ with .CommonLabels.Remove .GroupLabels.Names }}{{ .Values | join \" \" }}{{ end }}){{ end }}"
-      text: "<!channel> \nSummary: {{ .CommonAnnotations.summary }}\nDescription: {{ .CommonAnnotations.description }}\nSuggested first steps: {{ .CommonAnnotations.suggested_troubleshooting_steps }}"
+      title: '{{ template "slack.floppaverse.title" . }}'
+      text: '{{ template "slack.floppaverse.text" . }}'
 
-# Pagers (not implemented)
-- name: 'floppaverse-webdev-pager'
+# Configs for critical alerts
+- name: 'floppaverse-webdev-critical'
   email_configs:
     - to: 'webdev_alerts_critical@floppa.org'
       headers:
-        subject: "[{{ .CommonLabels.severity | toUpper }}] [{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .GroupLabels.SortedPairs.Values | join \" \" }} {{ if gt (len .CommonLabels) (len .GroupLabels) }}({{ with .CommonLabels.Remove .GroupLabels.Names }}{{ .Values | join \" \" }}{{ end }}){{ end }}"
-  pagerduty_configs:
-    - routing_key: <webdev-team-key>
+        subject: '{{ template "email.floppaverse.title_critical" . }}'
+  slack_configs:
+    - api_url: 'https://hooks.slack.com/services/AAAAAAAAAAA/AAAAAAAAAAA/AAAAAAAAAAAAAAAAAAAAAAAA' # placeholder
+      channel: '#alerts_devops'
+      title: '{{ template "slack.floppaverse.title_critical" . }}'
+      text: '{{ template "slack.floppaverse.text_critical" . }}'
 
-- name: 'floppaverse-devops-pager'
+- name: 'floppaverse-devops-critical'
   email_configs:
     - to: 'devops_alerts_critical@floppa.org'
       headers:
-        subject: "[{{ .CommonLabels.severity | toUpper }}] [{{ .Status | toUpper }}{{ if eq .Status \"firing\" }}:{{ .Alerts.Firing | len }}{{ end }}] {{ .GroupLabels.SortedPairs.Values | join \" \" }} {{ if gt (len .CommonLabels) (len .GroupLabels) }}({{ with .CommonLabels.Remove .GroupLabels.Names }}{{ .Values | join \" \" }}{{ end }}){{ end }}"
-  pagerduty_configs:
-    - routing_key: <devops-team-key>
+        subject: '{{ template "email.floppaverse.title_critical" . }}'
+  slack_configs:
+    - api_url: 'https://hooks.slack.com/services/AAAAAAAAAAA/AAAAAAAAAAA/AAAAAAAAAAAAAAAAAAAAAAAA' # placeholder
+      channel: '#alerts_devops'
+      title: '{{ template "slack.floppaverse.title_critical" . }}'
+      text: '{{ template "slack.floppaverse.text_critical" . }}'
+
+# Custom alert templates
+templates:
+  - "/etc/alertmanager/templates/*.tmpl"

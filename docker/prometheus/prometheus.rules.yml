@@ -43,3 +43,22 @@ groups:
         By doing so you can find out if the error is caused by the view, or if it is a server issue.
         If the issue seems to be a bug in the code, check what recent commits changed the affected view.
         Use commands such as `git blame` and `git bisect` to help you determine which commit introduced the bug.
+  - alert: Overall HTTP 500 error rate greater than 5%
+    expr: |
+      (
+        sum by(instance) (rate(django_http_responses_total_by_status_view_method_total{status="500"}[5m]))
+        /
+        sum by(instance) (rate(django_http_responses_total_by_status_view_method_total[5m]))
+      ) * 100 > 5
+    for: 1m
+    keep_firing_for: 1m
+    labels:
+      severity: "critical"
+      alerttype: "webdev"
+    annotations:
+      summary: "Overall high HTTP 500 for {{ $labels.view }}"
+      description: "Overall HTTP 500 rate for instance {{ $labels.instance }} exceeds 5%: {{ $value }}%"
+      suggested_troubleshooting_steps: |
+        This alert hints at a significant part of the webapp being inaccessible.
+        If the issue appears to be a server/network malfunction, contact the devops team.
+        If not, check the branch the build is running on and see if the culprit is a bad commit.

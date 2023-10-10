@@ -32,7 +32,7 @@ groups:
       severity: "high"
       alerttype: "devops"
     annotations:
-      summary: "CPU usage > 80%"
+      summary: "High CPU usage"
       description: "Server CPU usage exceeds 80% for more than 10 minutes."
       suggested_troubleshooting_steps: |
         Check which processes are causing the most CPU usage (use e.g. 'top').
