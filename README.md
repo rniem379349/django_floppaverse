@@ -1,5 +1,6 @@
 # django-floppaverse
 A Django web app with blog, chat and notification functionality.
+Features a prometheus/grafana stack for monitoring and automatic alerts.
 
 ## Features
 ### Web app
