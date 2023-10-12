@@ -1,6 +1,9 @@
+import logging
+
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import EmptyPage, Paginator
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
@@ -19,6 +22,9 @@ from django.views.generic import (
 from blog.forms import BlogPostForm, NewsletterSubscriptionForm
 from blog.models import BlogPost
 from users.models import Profile
+
+logger = logging.getLogger(__name__)
+debug_logger = logging.getLogger("debug")
 
 
 class HomeView(ListView):
@@ -72,7 +78,7 @@ class PostDetailView(DetailView):
         return context
 
 
-class PostCreateView(CreateView):
+class PostCreateView(LoginRequiredMixin, CreateView):
     model = BlogPost
     form_class = BlogPostForm
     template_name = "blog/blogpost_create.html"
@@ -102,6 +108,7 @@ class PostCreateView(CreateView):
     def form_valid(self, form):
         blog_post = form.save()
         messages.success(self.request, message="Blog Post created!")
+        logger.info("Blog post {} created, sending notification".format(blog_post))
         self.send_notification(blog_post=blog_post)
         return super().form_valid(form)
 
@@ -124,7 +131,7 @@ class PostCreateView(CreateView):
         )
 
 
-class PostUpdateView(UpdateView):
+class PostUpdateView(LoginRequiredMixin, UpdateView):
     model = BlogPost
     form_class = BlogPostForm
     pk_url_kwarg = "blog_post_pk"
@@ -158,7 +165,7 @@ class PostUpdateView(UpdateView):
         return super().form_valid(form)
 
 
-class PostDeleteView(DeleteView):
+class PostDeleteView(LoginRequiredMixin, DeleteView):
     model = BlogPost
     pk_url_kwarg = "blog_post_pk"
     site_title = "Delete Blog Post"
@@ -200,7 +207,11 @@ class SearchResultsView(TemplateView):
             return {}
         blog_posts = BlogPost.objects.filter(title__icontains=query_str)
         users = Profile.objects.filter(user__username__icontains=query_str)
-        return list(blog_posts) + list(users)
+        results = list(blog_posts) + list(users)
+        debug_logger.debug(
+            "Found {} results for search query {}".format(len(results), query_str)
+        )
+        return results
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

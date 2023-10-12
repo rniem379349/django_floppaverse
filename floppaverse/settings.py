@@ -208,3 +208,57 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+# Logging
+log_fmt_simple = "{levelname}: {message}"
+log_fmt_verbose = "{levelname} {asctime} {pathname} {process:d} {thread:d}: {message}"
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "simple": {
+            "format": log_fmt_simple,
+            "style": "{",
+        },
+        "verbose": {
+            "format": log_fmt_verbose,
+            "style": "{",
+        },
+    },
+    "filters": {
+        "require_debug_true": {
+            "()": "django.utils.log.RequireDebugTrue",
+        },
+    },
+    "handlers": {
+        "console": {
+            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+            "class": "logging.StreamHandler",
+            "formatter": "simple",
+            # Write console logs only if Django DEBUG setting is enabled
+            "filters": ["require_debug_true"],
+        },
+        "file": {
+            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+            "class": "logging.FileHandler",
+            "filename": "/opt/app.log",
+            "formatter": "verbose",
+        },
+        "file_debug": {
+            "level": "DEBUG",
+            "class": "logging.FileHandler",
+            "filename": "/opt/debug.log",
+            "formatter": "verbose",
+        },
+    },
+    "root": {
+        "handlers": ["console", "file"],
+        "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+    },
+    "loggers": {
+        "debug": {
+            "handlers": ["file_debug"],
+            "level": "DEBUG",
+        }
+    },
+}

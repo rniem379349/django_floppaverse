@@ -1,3 +1,4 @@
+import logging
 from functools import cached_property
 
 from django.contrib import messages
@@ -21,6 +22,8 @@ from users.forms import (
 )
 from users.models import Profile, UserReport
 
+logger = logging.getLogger(__name__)
+
 
 class RegisterView(CreateView):
     model = User
@@ -29,7 +32,7 @@ class RegisterView(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["title"] = "Sign up | bloggodoggo"
+        context["title"] = "Sign up"
         return context
 
     def get_success_url(self):
@@ -67,6 +70,14 @@ class LoginView(views.LoginView):
             self.request, message="Logged in successfully. Welcome, {}!".format(user)
         )
         return super().form_valid(form)
+
+    def form_invalid(self, form, *args, **kwargs):
+        logger.warning(
+            "Invalid login attempt for user {}".format(
+                form.cleaned_data.get("username", "<unknown>")
+            )
+        )
+        return super(LoginView, self).form_invalid(form, *args, **kwargs)
 
 
 class LogoutView(views.LogoutView):
