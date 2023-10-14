@@ -1,0 +1,47 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+  - job_name: container_scrape
+    static_configs:
+    - targets:
+      - localhost
+      labels:
+        job: container_logs
+        __path__: /var/lib/docker/containers/*/*.log
+    pipeline_stages:
+    - labels:
+        stream:
+        container_name:
+    # # scrape only docker containers with logging label set to promtail
+    # filters:
+    #   - name: label
+    #     values: ["logging=promtail"]
+
+
+# scrape_configs:
+#   - job_name: docker
+#     dockerd_sd_configs:
+#       - host: unix:///var/run/docker.sock
+#         refresh_interval: 10s
+#         filters:
+#           - name: name
+#             # Filter logging to just our containers
+#             values: ["cosmos-openc3-*"]
+#     pipeline_stages:
+#     - docker: {}
+#     relabel_configs:
+#       - source_labels: ['__meta_docker_container_name']
+#         regex: '/(.*)'
+#         target_label: 'container'
+#       - source_labels: ['__meta_docker_container_log_stream']
+#         target_label: 'logstream'
+#       - source_labels: ['__meta_docker_container_label_logging_jobname']
+#         target_label: 'job'
