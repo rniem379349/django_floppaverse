@@ -3,14 +3,17 @@ name: Run pytest suite
 on:
   push:
     branches:
-      - "master"
+      - master
     paths:
       - "**.py"
   pull_request:
     types:
-      - "opened"
+      - opened
+      - edited
+      - labeled
+      - unlabeled
     branches:
-      - "master"
+      - master
     paths:
       - "**.py"
 

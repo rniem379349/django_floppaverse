@@ -1,0 +1,307 @@
+{
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "description": "Visualisations of Loki-aggregated logs",
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 10,
+    "links": [],
+    "liveNow": false,
+    "panels": [
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "fa4bffe6-f472-4bae-971f-7acbe7d4c047"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 3,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true
+        },
+        "pluginVersion": "10.1.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "loki",
+              "uid": "fa4bffe6-f472-4bae-971f-7acbe7d4c047"
+            },
+            "editorMode": "builder",
+            "expr": "{filename=\"/var/lib/docker/containers/ae5a341f0c7cff1c9df0ce85d9f3af59d9271e070a5e91811d9d942724c20d3a/ae5a341f0c7cff1c9df0ce85d9f3af59d9271e070a5e91811d9d942724c20d3a-json.log\"} |= `ERROR: ` !~ `HTTP .*(GET|POST|PUT)`",
+            "queryType": "range",
+            "refId": "A"
+          }
+        ],
+        "title": "Non-HTTP webapp container error logs",
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "fa4bffe6-f472-4bae-971f-7acbe7d4c047"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "labels"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 157
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Line"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 1514
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Time"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 244
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "tsNs"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 296
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 24,
+          "x": 0,
+          "y": 10
+        },
+        "id": 1,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": false,
+              "displayName": "Time"
+            }
+          ]
+        },
+        "pluginVersion": "10.1.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "loki",
+              "uid": "fa4bffe6-f472-4bae-971f-7acbe7d4c047"
+            },
+            "editorMode": "builder",
+            "expr": "{filename=\"/var/lib/docker/containers/ae5a341f0c7cff1c9df0ce85d9f3af59d9271e070a5e91811d9d942724c20d3a/ae5a341f0c7cff1c9df0ce85d9f3af59d9271e070a5e91811d9d942724c20d3a-json.log\"} |~ `ERROR: .*(GET|POST|PUT) .* 5\\d{2} `",
+            "queryType": "range",
+            "refId": "A"
+          }
+        ],
+        "title": "HTTP 5xx error logs",
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "loki",
+          "uid": "fa4bffe6-f472-4bae-971f-7acbe7d4c047"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "cellOptions": {
+                "type": "auto"
+              },
+              "inspect": false
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 24,
+          "x": 0,
+          "y": 19
+        },
+        "id": 2,
+        "options": {
+          "cellHeight": "sm",
+          "footer": {
+            "countRows": false,
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true
+        },
+        "pluginVersion": "10.1.2",
+        "targets": [
+          {
+            "datasource": {
+              "type": "loki",
+              "uid": "fa4bffe6-f472-4bae-971f-7acbe7d4c047"
+            },
+            "editorMode": "builder",
+            "expr": "{job=\"container_logs\", filename!=\"/var/lib/docker/containers/ae5a341f0c7cff1c9df0ce85d9f3af59d9271e070a5e91811d9d942724c20d3a/ae5a341f0c7cff1c9df0ce85d9f3af59d9271e070a5e91811d9d942724c20d3a-json.log\"} |~ `error|ERROR`",
+            "queryType": "range",
+            "refId": "A"
+          }
+        ],
+        "title": "Non-HTTP error logs",
+        "type": "table"
+      }
+    ],
+    "refresh": "",
+    "schemaVersion": 38,
+    "style": "dark",
+    "tags": [],
+    "templating": {
+      "list": []
+    },
+    "time": {
+      "from": "now-6h",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "Loki Stats",
+    "uid": "da185a35-6c05-4aee-b8a1-248584bc8efd",
+    "version": 1,
+    "weekStart": ""
+  }

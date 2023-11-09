@@ -3,12 +3,15 @@ name: Test alertmanager configuration
 on:
   push:
     branches:
-      - "master"
+      - master
   pull_request:
     types:
-      - "opened"
+      - opened
+      - edited
+      - labeled
+      - unlabeled
     branches:
-      - "master"
+      - master
 
 jobs:
   test_alertmanager:
