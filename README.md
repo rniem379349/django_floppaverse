@@ -14,7 +14,8 @@ Features a prometheus/grafana stack for monitoring and automatic alerts.
     2. Server (through `node-exporter`),
     3. Grafana dashboarding tool,
     4. Prometheus itself.
-- Grafana for constructing dashboards with visualisations of Prometheus metrics,
+- Loki for log aggregation,
+- Grafana for constructing dashboards with visualisations of Prometheus metrics and logs,
 - Alertmanager for sending alerts when Prometheus detects certain conditions (alerts are defined in `docker/prometheus/*.rules.yml` files),
 - MailHog for local SMTP server setup (allows for local alert email testing).
 
